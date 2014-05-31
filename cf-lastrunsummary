@@ -9,9 +9,6 @@ Detect and alert when CFEngine is stuck
 Script used to detect and alert when CFEngine is stuck and not applying any
 promise for a while (`MAX_SECOND_LATE`)
 
-It needs to be run as root to be able to parse the `CF_PROMISE_SUMMARY_FILE`
-file.
-
 ## 2. Usage
 
 ### 2.1. On a system where CFEngine is stuck

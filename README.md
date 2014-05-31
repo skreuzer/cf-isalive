@@ -7,9 +7,6 @@ Detect and alert when CFEngine is stuck
 Script used to detect and alert when CFEngine is stuck and not applying any
 promise for a while (`MAX_SECOND_LATE`)
 
-It needs to be run as root to be able to parse the `CF_PROMISE_SUMMARY_FILE`
-file.
-
 ## 2. Usage
 
 ### 2.1. On a system where CFEngine is stuck
@@ -18,7 +15,9 @@ file.
 root@host:~# /etc/cron.hourly/cf-lastrunsummary
 I'm late ! CFEngine did not run for 13770 seconds ! Check me !
 Last /var/cfengine/promise_summary.log line:
-1401544020,1401544080: Outcome of version Percolate Promises.cf 1.4 (agent-0): Promises observed to be kept 100%, Promises repaired 0%, Promises not repaired 0%
+1401544020,1401544080: Outcome of version Percolate Promises.cf 1.4 (agent-0):
+    Promises observed to be kept 100%, Promises repaired 0%, Promises not
+    repaired 0%
 root@host:~#
 ```
 
