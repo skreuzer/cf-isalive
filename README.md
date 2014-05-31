@@ -1,4 +1,4 @@
-# cf-lastsummary
+cf-lastrun
 
 Detect and alert when CFEngine is stuck
 
@@ -12,7 +12,7 @@ promise for a while (`MAX_SECOND_LATE`)
 ### 2.1. On a system where CFEngine is stuck
 
 ```bash
-root@host:~# /etc/cron.hourly/cf-lastrunsummary
+root@host:~# /etc/cron.hourly/cf-lastrun
 I'm late ! CFEngine did not run for 13770 seconds ! Check me !
 Last /var/cfengine/promise_summary.log line:
 1401544020,1401544080: Outcome of version Percolate Promises.cf 1.4 (agent-0):
@@ -24,7 +24,7 @@ root@host:~#
 ### 2.2. On a system where CFEngine is in a good state
 
 ```bash
-root@host:~# /etc/cron.hourly/cf-lastrunsummary
+root@host:~# /etc/cron.hourly/cf-lastrun
 root@host:~#
 ```
 
@@ -34,13 +34,13 @@ Ideally you want to run this script hourly and get its output by email.
 It's easy to do on any debian based system:
 
 ```bash
-root@host:~# cp cf-lastrunsummary /etc/cron.hourly/cf-lastrunsummary
-root@host:~# chmod +x /etc/cron.hourly/cf-lastrunsummary
+root@host:~# cp cf-lastrunsummary /etc/cron.hourly/cf-lastrun
+root@host:~# chmod +x /etc/cron.hourly/cf-lastrun
 ```
 
 ## 4. Licensing
 
-cf-lastsummary
+cf-lastrun
 Copyright (C) 2012  Percolate Industries, Inc.
 
 This program is free software: you can redistribute it and/or modify
