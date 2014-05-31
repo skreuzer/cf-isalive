@@ -69,7 +69,17 @@ MAX_SECOND_LATE = 3600  # An instance is not alerting the ops if it's late less
 
 
 def get_last_line_of_file(filepath):
-    # Get the last line of the file
+    """
+    Get the last line of the file
+
+    Args:
+        filepath (str)
+
+    Returns:
+        str
+    """
+    assert isinstance(filepath, str)
+
     try:
         logfile = open(CF_PROMISE_SUMMARY_FILE, 'r')
     except IOError:
