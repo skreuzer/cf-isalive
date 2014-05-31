@@ -13,7 +13,7 @@ promise for a while (`MAX_SECOND_LATE`)
 
 ### 2.1. On a system where CFEngine is stuck
 
-```bash
+```
 root@host:~# /etc/cron.hourly/cf-isalive
 I'm late ! CFEngine did not run for 13770 seconds ! Check me !
 Last /var/cfengine/promise_summary.log line:
@@ -25,7 +25,7 @@ root@host:~#
 
 ### 2.2. On a system where CFEngine is in a good state
 
-```bash
+```
 root@host:~# /etc/cron.hourly/cf-isalive
 root@host:~#
 ```
@@ -35,7 +35,7 @@ root@host:~#
 Ideally you want to run this script hourly and get its output by email.
 It's easy to do on any debian based system:
 
-```bash
+```
 root@host:~# cp cf-isalive /etc/cron.hourly/cf-isalive
 root@host:~# chmod +x /etc/cron.hourly/cf-isalive
 ```
