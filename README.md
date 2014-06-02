@@ -4,7 +4,7 @@ Detect and alert when CFEngine is stuck
 
 ## 1. About
 
-Script used to detect and alert when CFEngine is stuck and not applying any
+Script used to detect and alert when CFEngine is stuck or dead and not applying any
 promise for a while (`MAX_SECOND_LATE`)
 
 ## 2. Usage
