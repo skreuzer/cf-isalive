@@ -71,11 +71,6 @@ import argparse
 # The location of the promise summary log file
 CF_PROMISE_SUMMARY_FILE = u'/var/cfengine/promise_summary.log'
 
-# An instance is not alerting the ops if it's late less than this amount of
-# seconds
-MAX_SECOND_LATE = 3600
-
-
 def get_last_line_of_file(filepath):
     """
     Get the last line of the file
@@ -109,7 +104,7 @@ def get_last_line_of_file(filepath):
     return last_line
 
 
-def main():
+def main(max_second_late):
     last_line = get_last_line_of_file(CF_PROMISE_SUMMARY_FILE)
     # print last_line
     # 1337377540,1337377541: Outcome of version Percolate Promises.cf 1.0.0
@@ -139,13 +134,14 @@ def main():
 
     # Since when this instance has not scheduled a CFEngine run ?
     sec_late = int(time.time() - float(end_time))
-    if sec_late > args.max_seconds:
+    if sec_late > max_second_late:
         exit("I'm late ! CFEngine did not run for {} seconds ! Check me !\n"
              "Last {} line:\n{}"
              .format(sec_late, CF_PROMISE_SUMMARY_FILE, last_line))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--max-seconds', action="store", dest='max_seconds', type=int, default=MAX_SECOND_LATE)
+    parser.add_argument('-s', '--max-seconds', action="store",
+                       dest='max_seconds', type=int, default=3600)
     args = parser.parse_args()
-    main()
+    main(args.max_seconds)
