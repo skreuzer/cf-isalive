@@ -100,8 +100,7 @@ def get_last_line_of_file(filepath):
 
     return last_line
 
-
-def main(max_second_late, promise_summary_log):
+def parse_promise_summary(promise_summary_log):
     last_line = get_last_line_of_file(promise_summary_log)
     # print last_line
     # 1337377540,1337377541: Outcome of version Percolate Promises.cf 1.0.0
@@ -121,20 +120,26 @@ def main(max_second_late, promise_summary_log):
     if not matches:
         exit('Unable to parse the last line of {}'.format(promise_summary_log))
 
-    # start_time = matches.groups()[0]
-    end_time = matches.groups()[1]
-    # version_string = matches.groups()[2]
-    # promises_kept = matches.groups()[3]
-    # promises_repaired = matches.groups()[5]
-    # promises_not_repaired = matches.groups()[7]
-    # print matches.groups()
+    return {
+        'start_time': matches.groups()[0],
+        'end_time': matches.groups()[1],
+        'version_string':  matches.groups()[2],
+        'promises_kept': matches.groups()[3],
+        'promises_repaired': matches.groups()[5],
+        'promises_not_repaired': matches.groups()[7],
+        'last_line': last_line,
+        'promise_summary_log': promise_summary_log
+    }
 
+def display_summary(max_second_late, summary):
     # Since when this instance has not scheduled a CFEngine run ?
-    sec_late = int(time.time() - float(end_time))
+    sec_late = int(time.time() - float(summary['end_time']))
     if sec_late > max_second_late:
         exit("I'm late ! CFEngine did not run for {} seconds ! Check me !\n"
-             "Last {} line:\n{}"
-             .format(sec_late, promise_summary_log, last_line))
+             "Last line in {}:\n{}"
+             .format(sec_late,
+                     summary['promise_summary_log'],
+                     summary['last_line']))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -144,4 +149,6 @@ if __name__ == '__main__':
                        dest='promise_summary_file', type=str,
                        default=u'/var/cfengine/promise_summary.log')
     args = parser.parse_args()
-    main(args.max_seconds, args.promise_summary_file)
+
+    summary = parse_promise_summary(args.promise_summary_file)
+    display_summary(args.max_seconds, summary)
