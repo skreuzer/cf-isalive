@@ -73,12 +73,11 @@ def get_last_line_of_file(filepath):
     Get the last line of the file
 
     Args:
-        filepath (basestring)
+        filepath
 
     Returns:
         str
     """
-    assert isinstance(filepath, basestring)
 
     try:
         logfile = open(filepath, 'r')
@@ -141,6 +140,37 @@ def display_summary(max_second_late, summary):
                      summary['promise_summary_log'],
                      summary['last_line']))
 
+def prometheus_summary(summary):
+    o = """
+# HELP cfengine_promises_kept Percentage of promises kept during last run.
+# TYPE cfengine_promises_kept gauge
+cfengine_promises_kept {promises_kept}
+# HELP cfengine_promises_repaired Percentage of promises repaired during last run.
+# TYPE cfengine_promises_repaired gauge
+cfengine_promises_repaired {promises_repaired}
+# HELP cfengine_promises_not_repaired Percentage of promises not kept during last run.
+# TYPE cfengine_promises_not_repaired gauge
+cfengine_promises_not_repaired {promises_not_repaired}
+# HELP cfengine_last_run_seconds Seconds since epoch of last run.
+# TYPE cfengine_last_run_seconds gauge
+cfengine_last_run_seconds {last_run}
+# HELP cfengine_run_time_seconds_total Total number of seconds cfengine spent running.
+# TYPE cfengine_run_time_seconds_total counter
+cfengine_run_time_seconds_total {total_run_time}
+# HELP cfengine_version_info A metric with a constant '1' value labeled by version
+# TYPE cfengine_version_info gauge
+cfengine_version_info{{version="{version}"}} 1
+""".format(
+        promises_kept=summary['promises_kept'],
+        promises_not_repaired=summary['promises_not_repaired'],
+        promises_repaired=summary['promises_repaired'],
+        total_run_time=(int(summary['end_time']) - int(summary['start_time'])),
+        last_run=(int(time.time()) - int(summary['end_time'])),
+        version=summary['version_string']
+    )
+
+    print(o)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--max-seconds', action="store",
@@ -148,7 +178,12 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--file', action="store",
                        dest='promise_summary_file', type=str,
                        default=u'/var/cfengine/promise_summary.log')
+    parser.add_argument('-p', '--prometheus', action='store_true',
+                       help="Display results in Prometheus exposition format")
     args = parser.parse_args()
 
     summary = parse_promise_summary(args.promise_summary_file)
-    display_summary(args.max_seconds, summary)
+    if args.prometheus:
+        prometheus_summary(summary)
+    else:
+        display_summary(args.max_seconds, summary)
